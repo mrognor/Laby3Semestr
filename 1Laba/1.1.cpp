@@ -1,5 +1,10 @@
-// Task 1.1
-void PushOnePointOne(list<double>* lst, double elem)
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+template <class T>
+void Push(list<double>* lst, T elem)
 {
 	for (list<double>::iterator it = lst->begin(); it != lst->end(); it++)
 	{
@@ -12,22 +17,24 @@ void PushOnePointOne(list<double>* lst, double elem)
 	lst->insert(lst->end(), elem);
 }
 
-void PrintOnePointOne(list<double> lst)
+template <class T>
+void Print(list<T> lst)
 {
-	for (list<double>::iterator it = lst.begin(); it != lst.end(); it++)
+	for (auto it = lst.begin(); it != lst.end(); it++)
 	{
 		cout << *it << " ";
 	}
 	cout << endl;
 }
 
-void PopOnePointOne(list<double>* lst, int pos)
+template <class T>
+void Pop(list<T>* lst, int pos)
 {
 	if (pos >= lst->size())
 		exit(2);
 
 	int count = 0;
-	for (list<double>::iterator it = lst->begin(); it != lst->end(); it++)
+	for (auto it = lst->begin(); it != lst->end(); it++)
 	{
 		if (count == pos)
 		{
@@ -38,15 +45,18 @@ void PopOnePointOne(list<double>* lst, int pos)
 	}
 }
 
-bool PredicatOnePointOne(double a)
+template <class T>
+bool Predicat(T a)
 {
 	return (a > 0) ? true : false;
 }
 
-list<double>* FilterOnePointOne(list<double>* lst, bool (*f)(double))
+template <class T>
+list<T>* Filter(list<T>* lst, bool (*f)(T))
 {
-	list<double>* tmplst = new list<double>;
-	for (list<double>::iterator it = lst->begin(); it != lst->end(); it++)
+	// После использования new мы должны сделать delete, но мы возвращаем указатель. Как нам потом очистить память 
+	list<T>* tmplst = new list<T>;
+	for (auto it = lst->begin(); it != lst->end(); it++)
 	{
 		if (f(*it))
 		{
@@ -55,19 +65,19 @@ list<double>* FilterOnePointOne(list<double>* lst, bool (*f)(double))
 	}
 	return tmplst;
 }
-// End task 1.1
+
 
 int main()
 {
 	list<double> OnePointOne{ 2.0, -3.0, 5.6, -1.0, 2.0, 5.7, -23.76 };
-	PrintOnePointOne(OnePointOne);
+	Print(OnePointOne);
 
-	PushOnePointOne(&OnePointOne, 89.9);
-	PrintOnePointOne(OnePointOne);
+	Push(&OnePointOne, 89.9);
+	Print(OnePointOne);
 
-	PopOnePointOne(&OnePointOne, 2);
-	PrintOnePointOne(OnePointOne);
+	Pop(&OnePointOne, 2);
+	Print(OnePointOne);
 
-	auto p = FilterOnePointOne(&OnePointOne, PredicatOnePointOne);
-	PrintOnePointOne(*p);
+	auto p = Filter(&OnePointOne, Predicat);
+	Print(*p);
 }
