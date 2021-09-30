@@ -1,6 +1,11 @@
-// Task 1.2
-struct Serial
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+class Serial
 {
+private:
 	string Name = "None";
 	string Producer = "None";
 	int Sesons = 0;
@@ -8,6 +13,72 @@ struct Serial
 	int Rank = 0;
 	string Date = "None";
 	string Country = "None";
+public:
+
+	friend ostream& operator<<(ostream& stream, const Serial& S);
+
+	void SetName(string name) { Name = name; }
+	void SetRank(int rank) { Rank = rank; }
+	
+	bool operator==(const Serial& s)
+	{
+		bool f = true;
+
+		if (Name == s.Name)
+			f = false;
+
+		if (Producer == s.Producer)
+			f = false;
+
+		if (Sesons == s.Sesons)
+			f = false;
+
+		if (Popularity == s.Popularity)
+			f = false;
+
+		if (Rank == s.Rank)
+			f = false;
+
+		if (Date == s.Date)
+			f = false;
+
+		if (Country == s.Country)
+			f = false;
+
+		return f;
+	}
+
+	bool operator>(const Serial& s)
+	{
+		if (Rank > s.Rank)
+			return true;
+		if (Rank < s.Rank)
+			return false;
+		if (Rank == s.Rank)
+		{
+			if (Name > s.Name)
+				return true;
+			if (Name < s.Name)
+				return false;
+		}
+		return false;
+	}
+
+	bool operator<(const Serial& s)
+	{
+		if (Rank < s.Rank)
+			return true;
+		if (Rank > s.Rank)
+			return false;
+		if (Rank == s.Rank)
+		{
+			if (Name < s.Name)
+				return true;
+			if (Name > s.Name)
+				return false;
+		}
+		return false;
+	}
 };
 
 ostream& operator<<(ostream& stream, const Serial& S)
@@ -18,29 +89,25 @@ ostream& operator<<(ostream& stream, const Serial& S)
 	return stream;
 }
 
-Serial* PopOnePointTwo(list<Serial>* lst, int pos)
+template <class T>
+T Pop(list<T>* lst, int pos)
 {
 	if (pos >= lst->size())
 		exit(2);
 
-	Serial* MaxElem = new Serial;
-	for (list<Serial>::iterator it = lst->begin(); it != lst->end(); it++)
+	T MaxElem = *lst->begin();
+	for (auto it = lst->begin(); it != lst->end(); it++)
 	{
-		if ((*it).Rank > MaxElem->Rank)
-			MaxElem = &(*it);
-		if ((*it).Rank == MaxElem->Rank)
-		{
-			if ((*it).Name > MaxElem->Name)
-				MaxElem = &(*it);
-		}
+		if (*it > MaxElem)
+			MaxElem = *it;
 	}
 
 	int count = 0;
-	for (list<Serial>::iterator it = lst->begin(); it != lst->end(); it++)
+	for (auto it = lst->begin(); it != lst->end(); it++)
 	{
 		if (count == pos)
 		{
-			//lst->remove(*it);
+			lst->remove(*it);
 			break;
 		}
 		count++;
@@ -48,9 +115,10 @@ Serial* PopOnePointTwo(list<Serial>* lst, int pos)
 	return MaxElem;
 }
 
-void PrintOnePointTwo(list<Serial> lst)
+template <class T>
+void Print(list<T> lst)
 {
-	for (list<Serial>::iterator it = lst.begin(); it != lst.end(); it++)
+	for (auto it = lst.begin(); it != lst.end(); it++)
 	{
 		cout << *it << endl;
 	}
@@ -58,18 +126,18 @@ void PrintOnePointTwo(list<Serial> lst)
 int main()
 {
 	Serial A; Serial B; Serial C; Serial D;
-	A.Rank = 10;
-	B.Rank = 10;
-	C.Rank = 8;
-	D.Rank = 7;
-	A.Name = "AAAA";
-	B.Name = "AABB";
-	C.Name = "AAAA";
-	D.Name = "AAAA";
+	A.SetRank(10);
+	B.SetRank(10);
+	C.SetRank(8);
+	D.SetRank(7);
+	A.SetName("AAAA");
+	B.SetName("AABB");
+	C.SetName("AAAA");
+	D.SetName("AAAA");
 
 	list<Serial> OnePointTwo{ A,B,C,D };
-	auto f = PopOnePointTwo(&OnePointTwo, 2);
-	cout << *f << endl;
+	auto f = Pop(&OnePointTwo, 2);
+	cout << f << endl;
 	cout << endl;
-	PrintOnePointTwo(OnePointTwo);
+	Print(OnePointTwo);
 }
