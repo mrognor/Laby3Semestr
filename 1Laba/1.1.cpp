@@ -46,6 +46,15 @@ void Pop(list<T>* lst, int pos)
 }
 
 template <class T>
+void PopFirst(list<T>* lst)
+{
+	if (lst->size() == 0)
+		exit(2);
+
+	lst->remove(*lst->begin());
+}
+
+template <class T>
 bool Predicat(T a)
 {
 	return (a > 0) ? true : false;
@@ -76,6 +85,9 @@ int main()
 	Print(OnePointOne);
 
 	Pop(&OnePointOne, 2);
+	Print(OnePointOne);
+
+	PopFirst(&OnePointOne);
 	Print(OnePointOne);
 
 	auto p = Filter(&OnePointOne, Predicat);
