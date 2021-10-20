@@ -19,7 +19,7 @@ public:
 
 	void SetName(string name) { Name = name; }
 	void SetRank(int rank) { Rank = rank; }
-	
+
 	bool operator==(const Serial& s)
 	{
 		bool f = true;
@@ -112,6 +112,24 @@ T Pop(list<T>* lst, int pos)
 		}
 		count++;
 	}
+	return MaxElem;
+}
+
+template <class T>
+T PopFirst(list<T>* lst)
+{
+	if (lst->size() == 0)
+		exit(2);
+
+	T MaxElem = *lst->begin();
+	for (auto it = lst->begin(); it != lst->end(); it++)
+	{
+		if (*it > MaxElem)
+			MaxElem = *it;
+	}
+	auto it = lst->begin();
+	lst->remove(*it);
+
 	return MaxElem;
 }
 
