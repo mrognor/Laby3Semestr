@@ -54,3 +54,4 @@ private:
 	//текущий элемент
 	Element<ValueType>* ptr;;
 };
+

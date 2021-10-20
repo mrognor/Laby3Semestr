@@ -173,6 +173,18 @@ public:
 			ptr = ptr->getNext();
 		return *this;
 	}
+	ListIterator& operator--()
+	{
+		if (ptr != NULL)
+			ptr = ptr->getPrevious();
+		return *this;
+	}
+	ListIterator& operator--(int v)
+	{
+		if (ptr != NULL)
+			ptr = ptr->getPrevious();
+		return *this;
+	}
 private:
 	//текущий элемент
 	Element<ValueType>* ptr;
@@ -186,7 +198,7 @@ public:
 	IteratedLinkedList() : LinkedListParent<T>() { cout << "\nIteratedLinkedList constructor"; }
 	virtual ~IteratedLinkedList() { cout << "\nIteratedLinkedList destructor"; }
 
-	ListIterator<T> iterator;
+	//ListIterator<T> iterator;
 
 	ListIterator<T> begin() { ListIterator<T> it = LinkedListParent<T>::head; return it; }
 	ListIterator<T> end() { ListIterator<T> it = LinkedListParent<T>::tail; return it; }
@@ -197,16 +209,15 @@ class Stack : public IteratedLinkedList<T>
 {
 public:
 	Stack() : IteratedLinkedList<T>() { cout << "\nStack constructor"; }
-	virtual ~Stack() { cout << "\nStack destructor"; }
 
-	virtual Element<T>* push(T value) override 
+	virtual Element<T>* push(T value) override
 	{
 		if (IteratedLinkedList<T>::num > 0)
 		{
 			Element<T>* newElem = new Element<T>(value);
 			IteratedLinkedList<T>::tail->setNext(newElem);
 			newElem->setPrevious(IteratedLinkedList<T>::tail);
-			IteratedLinkedList<T>::tail = IteratedLinkedList<T>::tail->getNext(); 
+			IteratedLinkedList<T>::tail = IteratedLinkedList<T>::tail->getNext();
 		}
 		else
 		{
@@ -217,7 +228,7 @@ public:
 		return IteratedLinkedList<T>::tail;
 	}
 
-	virtual Element<T>* pop() override 
+	virtual Element<T>* pop() override
 	{
 		if (IteratedLinkedList<T>::num > 0)
 		{
@@ -229,7 +240,14 @@ public:
 		}
 		return NULL;
 	}
-};
+	virtual ~Stack() 
+	{
+		while (auto i = IteratedLinkedList<T>::tail; i != IteratedLinkedList<T>::head; i = i.getPrevious())
+		{
+			delete i;
+		}
+	}
+};	
 
 bool condition(int value)
 {
@@ -254,7 +272,7 @@ template<class T>
 class SortedStack : public Stack<T>
 {
 	SortedStack() : Stack<T>() { cout << "\nSortedStack constructor"; }
-	virtual ~SortedStack() { cout << "\nSortedStack destructor"; }
+	
 	virtual Element<T>* push(T value) override
 	{
 		if (IteratedLinkedList<T>::num > 0)
@@ -280,6 +298,13 @@ class SortedStack : public Stack<T>
 		IteratedLinkedList<T>::num++;
 		return IteratedLinkedList<T>::tail;
 	}
+	virtual ~SortedStack() 
+	{ 
+		while (auto i = IteratedLinkedList<T>::tail; i != IteratedLinkedList<T>::head; i = i.getPrevious())
+		{
+			delete i;
+		}
+	}
 };
 
 int main()
@@ -299,13 +324,14 @@ int main()
 
 	cout << S;
 	cout << "\nIterators:\n";
-	S.iterator = S.begin();
-	while (S.iterator != S.end())
+	ListIterator<int> it = S.begin();
+
+	while (it != S.end())
 	{
-		cout << *S.iterator << " ";
-		S.iterator++;
+		cout << *it << " ";
+		it++;
 	}
-	cout << *S.iterator << " ";
+	cout << *it << " ";
 
 	Stack<int> S1;
 	filter(&S, &S1, condition);
