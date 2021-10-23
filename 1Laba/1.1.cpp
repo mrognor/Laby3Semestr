@@ -27,31 +27,16 @@ void Print(list<T> lst)
 	cout << endl;
 }
 
-template <class T>
-void Pop(list<T>* lst, int pos)
-{
-	if (pos >= lst->size())
-		exit(2);
-
-	int count = 0;
-	for (auto it = lst->begin(); it != lst->end(); it++)
-	{
-		if (count == pos)
-		{
-			lst->remove(*it);
-			return;
-		}
-		count++;
-	}
-}
 
 template <class T>
-void PopFirst(list<T>* lst)
+T PopFirst(list<T>* lst)
 {
 	if (lst->size() == 0)
 		exit(2);
 
+	auto f = *lst->begin();
 	lst->remove(*lst->begin());
+	return f;
 }
 
 template <class T>
@@ -82,9 +67,6 @@ int main()
 	Print(OnePointOne);
 
 	Push(&OnePointOne, 89.9);
-	Print(OnePointOne);
-
-	Pop(&OnePointOne, 2);
 	Print(OnePointOne);
 
 	PopFirst(&OnePointOne);

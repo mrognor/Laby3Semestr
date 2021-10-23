@@ -90,47 +90,11 @@ ostream& operator<<(ostream& stream, const Serial& S)
 }
 
 template <class T>
-T Pop(list<T>* lst, int pos)
-{
-	if (pos >= lst->size())
-		exit(2);
-
-	T MaxElem = *lst->begin();
-	for (auto it = lst->begin(); it != lst->end(); it++)
-	{
-		if (*it > MaxElem)
-			MaxElem = *it;
-	}
-
-	int count = 0;
-	for (auto it = lst->begin(); it != lst->end(); it++)
-	{
-		if (count == pos)
-		{
-			lst->remove(*it);
-			break;
-		}
-		count++;
-	}
-	return MaxElem;
-}
-
-template <class T>
 T PopFirst(list<T>* lst)
 {
-	if (lst->size() == 0)
-		exit(2);
-
-	T MaxElem = *lst->begin();
-	for (auto it = lst->begin(); it != lst->end(); it++)
-	{
-		if (*it > MaxElem)
-			MaxElem = *it;
-	}
-	auto it = lst->begin();
-	lst->remove(*it);
-
-	return MaxElem;
+	T tmp = *(--lst->end());
+	lst->pop_back();
+	return tmp;
 }
 
 template <class T>
@@ -154,7 +118,7 @@ int main()
 	D.SetName("AAAA");
 
 	list<Serial> OnePointTwo{ A,B,C,D };
-	auto f = Pop(&OnePointTwo, 2);
+	auto f = PopFirst(&OnePointTwo);
 	cout << f << endl;
 	cout << endl;
 	Print(OnePointTwo);

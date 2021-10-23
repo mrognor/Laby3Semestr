@@ -186,8 +186,6 @@ public:
 	IteratedLinkedList() : LinkedListParent<T>() { cout << "\nIteratedLinkedList constructor"; }
 	virtual ~IteratedLinkedList() { cout << "\nIteratedLinkedList destructor"; }
 
-	ListIterator<T> iterator;
-
 	ListIterator<T> begin() { ListIterator<T> it = LinkedListParent<T>::head; return it; }
 	ListIterator<T> end() { ListIterator<T> it = LinkedListParent<T>::tail; return it; }
 };
@@ -385,13 +383,13 @@ int main()
 
 	cout << S;
 	cout << "\nIterators:\n";
-	S.iterator = S.begin();
-	while (S.iterator != S.end())
+	auto f = S.begin();
+	while (f != S.end())
 	{
-		cout << *S.iterator << " ";
-		S.iterator++;
+		cout << *f << " ";
+		f++;
 	}
-	cout << *S.iterator << " ";
+	cout << *f << " ";
 
 	Stack<int> S1;
 	filter(&S, &S1, condition);
@@ -410,4 +408,3 @@ int main()
 	D.SetName("AAAA");
 	cout << S2 << endl;
 }
-
