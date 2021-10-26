@@ -5,12 +5,12 @@ using namespace std;
 struct Serial
 {
 	int Rank;
-	Serial() { Rank = rand()%10; }
+	Serial() { Rank = rand() % 10; }
 
 	friend std::ostream& operator<<(std::ostream& stream, const Serial& serial)
-	{ 
-		stream << "Rank: " << serial.Rank; 
-		return stream; 
+	{
+		stream << "Rank: " << serial.Rank;
+		return stream;
 	}
 };
 
@@ -25,25 +25,25 @@ bool operator==(Serial serA, Serial serB)
 template <class TKey, class TValue>
 pair<TKey, TValue> FindByKey(const map<TKey, TValue>& Map, TKey key)
 {
-	auto it = Map.begin();
-	while (it != Map.end())
+	auto res = Map.find(key);
+
+	if (res != Map.end())
 	{
-		if (it->first == key)
-			return pair<TKey, TValue>(it->first, it->second);
-		it++;
+		return pair<TKey, TValue>(res->first, res->second);
 	}
+	
 }
 
 template <class TKey, class TValue>
 pair<TKey, TValue> FindByValue(const map<TKey, TValue>& Map, TValue value)
 {
 	auto it = Map.begin();
-	while (it != Map.end())
-	{
-		if (it->second == value)
-			return pair<TKey, TValue>(it->first, it->second);
-		it++;
-	}
+		while (it != Map.end())
+		{
+			if (it->second == value)
+				return pair<TKey, TValue>(it->first, it->second);
+				it++;
+		}
 }
 
 template <class TKey, class TValue>
@@ -91,7 +91,7 @@ int main()
 	cout << "Key: " << f.first << ", value: " << f.second << endl;
 	cout << endl;
 	auto d = FindByValue<string, Serial>(Serials, D);
-	cout << "Key: " << d.first << ", value: " << d.second << endl;	
+	cout << "Key: " << d.first << ", value: " << d.second << endl;
 	cout << endl;
 	PrintMap(Serials);
 	cout << endl;

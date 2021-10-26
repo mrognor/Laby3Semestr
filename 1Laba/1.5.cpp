@@ -78,8 +78,10 @@ public:
 
 	virtual ~LinkedListParent()
 	{
-		//деструктор - освобождение памяти
-		cout << "\nParent destructor";
+		for (auto i = tail; i != head; i = i->getPrevious())
+		{
+			delete i;
+		}
 	}
 
 	//получение элемента по индексу - какова асимптотическая оценка этого действия?
@@ -184,7 +186,13 @@ class IteratedLinkedList : public LinkedListParent<T>
 {
 public:
 	IteratedLinkedList() : LinkedListParent<T>() { cout << "\nIteratedLinkedList constructor"; }
-	virtual ~IteratedLinkedList() { cout << "\nIteratedLinkedList destructor"; }
+	virtual ~IteratedLinkedList()
+	{ 
+		for (auto i = LinkedListParent<T>::tail; i != LinkedListParent<T>::head; i = i->getPrevious())
+		{
+			delete i;
+		}
+	}
 
 	ListIterator<T> begin() { ListIterator<T> it = LinkedListParent<T>::head; return it; }
 	ListIterator<T> end() { ListIterator<T> it = LinkedListParent<T>::tail; return it; }
@@ -195,7 +203,13 @@ class Stack : public IteratedLinkedList<T>
 {
 public:
 	Stack() : IteratedLinkedList<T>() { cout << "\nStack constructor"; }
-	virtual ~Stack() { cout << "\nStack destructor"; }
+	virtual ~Stack() 
+	{ 
+		for (auto i = LinkedListParent<T>::tail; i != LinkedListParent<T>::head; i = i->getPrevious())
+		{
+			delete i;
+		}
+	}
 
 	virtual Element<T>* push(T value) override
 	{
@@ -252,7 +266,13 @@ template<class T>
 class SortedStack : public Stack<T>
 {
 	SortedStack() : Stack<T>() { cout << "\nSortedStack constructor"; }
-	virtual ~SortedStack() { cout << "\nSortedStack destructor"; }
+	virtual ~SortedStack() 
+	{ 
+		for (auto i = LinkedListParent<T>::tail; i != LinkedListParent<T>::head; i = i.getPrevious())
+		{
+			delete i;
+		}
+	}
 	virtual Element<T>* push(T value) override
 	{
 		if (IteratedLinkedList<T>::num > 0)
