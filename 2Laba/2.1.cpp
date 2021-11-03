@@ -31,6 +31,7 @@ pair<TKey, TValue> FindByKey(const map<TKey, TValue>& Map, TKey key)
 	{
 		return pair<TKey, TValue>(res->first, res->second);
 	}
+	return pair<TKey, TValue>(Map.end()->first, Map.end()->second);
 	
 }
 
@@ -44,6 +45,7 @@ pair<TKey, TValue> FindByValue(const map<TKey, TValue>& Map, TValue value)
 				return pair<TKey, TValue>(it->first, it->second);
 				it++;
 		}
+	return pair<TKey, TValue>(Map.end()->first, Map.end()->second);
 }
 
 template <class TKey, class TValue>
