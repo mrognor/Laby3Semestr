@@ -94,11 +94,10 @@ void FindOstov(int index, std::vector<Node> nodes)
 		if (WasPrintedNode[NodesQueue.top().Number] == 0)
 			std::cout << std::endl;
 
-		if (WasPrintedNode[NodesQueue.top().Number] == 0)
-		{
-			std::cout << NodesQueue.top().Number << std::endl;
-			PrintingVector.push_back(NodesQueue.top().Number);
-		}
+		//if (WasPrintedNode[NodesQueue.top().Number] == 0)
+		//{
+		//	std::cout << NodesQueue.top().Number << std::endl;
+		//}
 
 		WasPrintedNode[NodesQueue.top().Number] = 1;
 
