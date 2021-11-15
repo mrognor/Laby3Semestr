@@ -10,10 +10,11 @@ public:
 	std::vector<int> Nodes;
 
 	int DistanceToThisElement = 0;
+	int SourceElement;
+	bool WasPassed = false;
+	bool WasFinallyPassed = false;
 
 	Node(int number, std::vector<int> nodes) : Number(number), Nodes(nodes) {}
-
-	void setDistanceToThisElement(int distance) { DistanceToThisElement = distance; }
 
 	friend bool operator<(const Node& n1, const Node& n2);
 
@@ -43,7 +44,7 @@ bool operator<(const Node& n1, const Node& n2)
 template <class T>
 void PrinPriorityQueue(std::priority_queue<T> q)
 {
-	while (!q.empty()) 
+	while (!q.empty())
 	{
 		std::cout << q.top() << std::endl;
 		q.pop();
@@ -52,60 +53,51 @@ void PrinPriorityQueue(std::priority_queue<T> q)
 
 void FindOstov(int index, std::vector<Node> nodes)
 {
+	/// Очередь с приоритетом для всех элементов
 	std::priority_queue<Node> NodesQueue;
-	
-	// Выделяем размер вектора для возможности поместить туда все элементы вектора нод.
-	// Так мы решим проблему с долгим добавлением.
-	int* PassedNodesArray = new int[nodes.size()];
-	for (int i = 0; i < nodes.size(); i++)
-	{
-		PassedNodesArray[i] = 0;
-	}
 
-	int* WasPrintedNode = new int[nodes.size()];
-	for (int i = 0; i < nodes.size(); i++)
-	{
-		WasPrintedNode[i] = 0;
-	}
-
+	/// Добавляем в очередь первый элемент
+	nodes[index].SourceElement = index;
+	nodes[index].WasPassed = true;
+	nodes[index].WasFinallyPassed = true;
 	NodesQueue.push(nodes[index]);
-	PassedNodesArray[index] = 1;
 
+
+	// Проход по очереди
 	while (!NodesQueue.empty())
 	{
+		// Сохраняем первый элемент из очереди для получения значений, а затем удаляем его из очереди
+		auto f = NodesQueue.top();
+		NodesQueue.pop();
+
+		// Вывод элемента в консоль
+		if (nodes[f.Number].WasFinallyPassed == false)
+			std::cout << "From: " << f.SourceElement << " With distance: " << nodes[f.SourceElement].Nodes[f.Number] << " To: " << f.Number << std::endl;
+
+		// В этом цикле мы проходим по всему вектору вершин. 
+		// Тут мы определяемя дистанцию от текущего элемента в очереди до каждого элемента вектора
+		// Мы помечаем вершину пройденной с помощью массива пройденных вершин
 		for (int i = 0; i < nodes.size(); i++)
 		{
-			if (PassedNodesArray[i] == 1 && nodes[i].DistanceToThisElement > NodesQueue.top().Nodes[i] && NodesQueue.top().Nodes[i] > 0)
-				NodesQueue.push(nodes[i]);
-			
-			nodes[i].setDistanceToThisElement(NodesQueue.top().Nodes[i]);
+			// Если мы были в вершине, но она не была напечатана и расстояние до нее от текущей вершины из очереди меньше, то мы должны повторно добавить ее в очередь
+			if (nodes[i].WasPassed == true && nodes[i].WasFinallyPassed == false && f.Nodes[i] < nodes[i].DistanceToThisElement && nodes[i].DistanceToThisElement > 0)
+				nodes[i].WasPassed = false;
 
-			if (WasPrintedNode[NodesQueue.top().Number] == 0)
-				std::cout << nodes[i].DistanceToThisElement << " ";
+			// Установка источника и расстояния для текущего элемента
+			nodes[i].SourceElement = f.Number;
+			nodes[i].DistanceToThisElement = f.Nodes[i];
 
-			if (PassedNodesArray[i] == 0 && nodes[i].DistanceToThisElement > 0)
+			// Если мы не были в этой вершине и расстояние до нее больше ноля, то мы заходим в нее
+			if (nodes[i].WasPassed == false && nodes[i].WasFinallyPassed == false && nodes[i].Nodes[f.Number] > 0)
 			{
+				nodes[i].WasPassed = true;
 				NodesQueue.push(nodes[i]);
-				PassedNodesArray[i] = 1;
 			}
-			
 		}
 
-		if (WasPrintedNode[NodesQueue.top().Number] == 0)
-			std::cout << std::endl;
-
-		//if (WasPrintedNode[NodesQueue.top().Number] == 0)
-		//{
-		//	std::cout << NodesQueue.top().Number << std::endl;
-		//}
-
-		WasPrintedNode[NodesQueue.top().Number] = 1;
-
-		NodesQueue.pop();		
+		// Говорим что прошли вершину окончательно
+		nodes[f.Number].WasFinallyPassed = true;
 	}
-
-	delete[] PassedNodesArray;
-	delete[] WasPrintedNode;
 }
 
 int main()
@@ -130,6 +122,10 @@ int main()
 	std::vector<Node> Nodes;
 	for (int i = 0; i < Matrix.size(); i++)
 		Nodes.push_back(Node(i, Matrix[i]));
+
+	FindOstov(0, Nodes);
+	
+	std::cout << "-----------" << std::endl;
 
 	std::vector<std::vector<int>> Matrix1 = {
 		{0, 6, 1, 5, 0, 0},
