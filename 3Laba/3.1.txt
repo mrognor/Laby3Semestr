@@ -51,15 +51,19 @@ void PrinPriorityQueue(std::priority_queue<T> q)
 	}
 }
 
-void FindOstov(int index, std::vector<Node> nodes)
+/// Алгоритм Прима
+std::vector<Node> FindOstov(int index, std::vector<Node> nodes)
 {
 	/// Очередь с приоритетом для всех элементов
 	std::priority_queue<Node> NodesQueue;
+	
+	std::vector<Node> ReturnVector;
+	ReturnVector.reserve(nodes.size());
 
 	/// Добавляем в очередь первый элемент
 	nodes[index].SourceElement = index;
 	nodes[index].WasPassed = true;
-	nodes[index].WasFinallyPassed = true;
+	//nodes[index].WasFinallyPassed = true;
 	NodesQueue.push(nodes[index]);
 
 
@@ -69,10 +73,6 @@ void FindOstov(int index, std::vector<Node> nodes)
 		// Сохраняем первый элемент из очереди для получения значений, а затем удаляем его из очереди
 		auto f = NodesQueue.top();
 		NodesQueue.pop();
-
-		// Вывод элемента в консоль
-		if (nodes[f.Number].WasFinallyPassed == false)
-			std::cout << "From: " << f.SourceElement << " With distance: " << nodes[f.SourceElement].Nodes[f.Number] << " To: " << f.Number << std::endl;
 
 		// В этом цикле мы проходим по всему вектору вершин. 
 		// Тут мы определяемя дистанцию от текущего элемента в очереди до каждого элемента вектора
@@ -95,9 +95,17 @@ void FindOstov(int index, std::vector<Node> nodes)
 			}
 		}
 
+		// Вывод элемента в консоль
+		if (nodes[f.Number].WasFinallyPassed == false)
+		{
+			//std::cout << "From: " << f.SourceElement << " With distance: " << nodes[f.SourceElement].Nodes[f.Number] << " To: " << f.Number << std::endl;
+			ReturnVector.push_back(f);
+		}
 		// Говорим что прошли вершину окончательно
 		nodes[f.Number].WasFinallyPassed = true;
 	}
+
+	return ReturnVector;
 }
 
 int main()
@@ -124,8 +132,6 @@ int main()
 		Nodes.push_back(Node(i, Matrix[i]));
 
 	FindOstov(0, Nodes);
-	
-	std::cout << "-----------" << std::endl;
 
 	std::vector<std::vector<int>> Matrix1 = {
 		{0, 6, 1, 5, 0, 0},
@@ -140,5 +146,16 @@ int main()
 	for (int i = 0; i < Matrix1.size(); i++)
 		Nodes1.push_back(Node(i, Matrix1[i]));
 
-	FindOstov(0, Nodes1);
+	auto f = FindOstov(0, Nodes1);
+
+	for (int i = 0; i < f.size(); i++)
+	{
+		std::cout << "From: " << f[i].SourceElement << " With distance: " << f[i].Nodes[f[i].SourceElement] << " To: " << f[i].Number <<  " Paths: ";
+
+		for (int j = 0; j < f[i].Nodes.size(); j++)
+		{
+			std::cout << f[i].Nodes[j] << " ";
+		}
+		std::cout << std::endl;
+	}
 }
