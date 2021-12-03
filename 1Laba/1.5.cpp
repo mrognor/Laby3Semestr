@@ -203,13 +203,6 @@ class Stack : public IteratedLinkedList<T>
 {
 public:
 	Stack() : IteratedLinkedList<T>() { cout << "\nStack constructor"; }
-	virtual ~Stack() 
-	{ 
-		for (auto i = LinkedListParent<T>::tail; i != LinkedListParent<T>::head; i = i->getPrevious())
-		{
-			delete i;
-		}
-	}
 
 	virtual Element<T>* push(T value) override
 	{
@@ -266,13 +259,7 @@ template<class T>
 class SortedStack : public Stack<T>
 {
 	SortedStack() : Stack<T>() { cout << "\nSortedStack constructor"; }
-	virtual ~SortedStack() 
-	{ 
-		for (auto i = LinkedListParent<T>::tail; i != LinkedListParent<T>::head; i = i.getPrevious())
-		{
-			delete i;
-		}
-	}
+
 	virtual Element<T>* push(T value) override
 	{
 		if (IteratedLinkedList<T>::num > 0)

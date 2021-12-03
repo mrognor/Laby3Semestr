@@ -128,7 +128,7 @@ std::vector<Node> BFS(int index, std::vector<Node> nodes)
 			if (nodes[i].WasFinallyPassed == false && nodes[i].SourceElement == NodesQueue.front().Number)
 			{
 				// Посдчет степени вершины
-				NodesQueue.front().ConnectionValue ++;
+				NodesQueue.front().ConnectionValue++;
 				nodes[i].ConnectionValue++;
 				nodes[i].WasFinallyPassed = true;
 				NodesQueue.push(nodes[i]);
@@ -143,6 +143,36 @@ std::vector<Node> BFS(int index, std::vector<Node> nodes)
 
 	return ReturnVector;
 }
+
+void CountStepen(std::vector<Node> f)
+{
+	auto b = BFS(0, f);
+
+	for (int i = 0; i < b.size(); i++)
+	{
+		std::cout << "Element: " << b[i].Number << " Stepen: " << b[i].ConnectionValue << " Paths: ";
+		for (int j = 0; j < b[i].Nodes.size(); j++)
+		{
+			std::cout << b[i].Nodes[j] << " ";
+		}
+		std::cout << std::endl;
+	}
+}
+
+float CountSrednStepen(std::vector<Node> f)
+{
+	auto b = BFS(0, f);
+
+	float AllStepen = 0;
+
+	for (int i = 0; i < b.size(); i++)
+	{
+		AllStepen += b[i].ConnectionValue;
+	}
+
+	return (AllStepen / b.size());
+}
+
 int main()
 {
 	std::vector<std::vector<int>> Matrix = {
@@ -196,22 +226,7 @@ int main()
 
 	std::cout << "G" << std::endl;
 
-	auto b = BFS(0, f);
+	CountStepen(f);
 
-	float AllStepen = 0;
-	
-	for (int i = 0; i < b.size(); i++)
-	{
-		std::cout << "Element: " << b[i].Number << " Stepen: " << b[i].ConnectionValue  << " Paths: ";
-		AllStepen += b[i].ConnectionValue;
-		for (int j = 0; j < b[i].Nodes.size(); j++)
-		{
-			std::cout << b[i].Nodes[j] << " ";
-		}
-		std::cout << std::endl;
-	}
-
-	std::cout << std::endl;
-
-	std::cout << AllStepen / b.size() << std::endl;
+	std::cout << CountSrednStepen(f) << std::endl;
 }
