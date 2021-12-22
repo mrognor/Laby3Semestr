@@ -1,9 +1,3 @@
-// TestList.cpp: определяет точку входа для консольного приложения.
-//
-
-// AbstractClassList.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
 #include <iostream>
 #include <fstream>
 
@@ -78,10 +72,16 @@ public:
 
 	virtual ~LinkedListParent()
 	{
-		for (auto i = tail; i != head; i = i->getPrevious())
+		if (tail == nullptr && head == nullptr)
+			return;
+		if (tail == head)
+			delete tail;
+
+		for (auto i = tail->getPrevious(); i != head; i = i->getPrevious())
 		{
-			delete i;
+			delete i->getNext();
 		}
+		delete head;
 	}
 
 	//получение элемента по индексу - какова асимптотическая оценка этого действия?
@@ -186,13 +186,7 @@ class IteratedLinkedList : public LinkedListParent<T>
 {
 public:
 	IteratedLinkedList() : LinkedListParent<T>() { cout << "\nIteratedLinkedList constructor"; }
-	virtual ~IteratedLinkedList()
-	{ 
-		for (auto i = LinkedListParent<T>::tail; i != LinkedListParent<T>::head; i = i->getPrevious())
-		{
-			delete i;
-		}
-	}
+
 
 	ListIterator<T> begin() { ListIterator<T> it = LinkedListParent<T>::head; return it; }
 	ListIterator<T> end() { ListIterator<T> it = LinkedListParent<T>::tail; return it; }
